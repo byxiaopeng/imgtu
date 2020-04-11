@@ -16,12 +16,12 @@ dns:
   enhanced-mode: redir-host
 # fake-ip-range: 198.18.0.1/16
   nameserver:
-    - 192.168.50.1
+    - 127.0.0.1:5353
 #    - tls://dns.233py.com:853
 # fallback: # 与 nameserver 内的服务器列表同时发起请求，当规则符合 GEOIP 在 CN 以外时，fallback 列表内的域名服务器生效。
 #  - 8.8.4.4
 Proxy:
-- { name: "byxiaopeng", type: vmess, server: peng.armn1.ml, port: 80, uuid: ad806487-2d26-4636-98b6-ab85cc8521f7, alterId: 4, cipher: auto, network: ws, ws-path: /ws, tls: false }
+- { name: "byxiaopeng", type: vmess, server: v2tls-docker-byxiaopeng.cloud.okteto.net, port: 443, uuid: ad806487-2d26-4636-98b6-ab85cc8521f7, alterId: 4, cipher: auto, network: ws, ws-path: /ws, tls: true }
 - { name: "heroku", type: vmess, server: prov2ss.cnm.workers.dev, port: 443, uuid: ad806487-2d26-4636-98b6-ab85cc8521f7, alterId: 4, cipher: auto, network: ws, ws-path: /, tls: true }
 - { name: "t免费节点", type: vmess, server: t.ibcl.us, port: 443, uuid: ad806487-2d26-4636-98b6-ab85cc8521f7, alterId: 4, cipher: auto, network: ws, ws-path: /, tls: true }
 - { name: "eu德国", type: vmess, server: ip.armn1.ml, port: 443, uuid: aa12098f-56f3-49ed-bd5d-267f3ce2e873, alterId: 4, cipher: auto, network: ws, ws-path: /, tls: true }
@@ -31,13 +31,14 @@ Proxy Group:
 # - { name: "PROXY", type: url-test, proxies: ["heroku", "t"], url: "http://www.gstatic.com/generate_204", interval: 300 }
 - { name: "全球直连", type: select, proxies: ["DIRECT"] }
 - { name: "全球拦截", type: select, proxies: ["REJECT", "DIRECT"] }
-- { name: "未写规则域名代理", type: select, proxies: ["t免费节点", "heroku"] }
+- { name: "未写规则域名代理", type: select, proxies: ["heroku", "t免费节点", "byxiaopeng"] }
 - { name: "youtube", type: select, proxies: ["heroku", "eu德国","byxiaopeng", "t免费节点"] }
 - { name: "奈非", type: select, proxies: ["byxiaopeng", "eu德国", "t免费节点"] }
 - { name: "Telegram", type: select, proxies: ["t免费节点","byxiaopeng","heroku"] }
 Rule:
 
-- DOMAIN,mtalk.google.com,全球直连
+#- DOMAIN,mtalk.google.com,全球直连
+- DOMAIN-SUFFIX,google.de,youtube
 - DOMAIN-SUFFIX,google.ru,youtube
 - DOMAIN-SUFFIX,google.com,youtube
 - DOMAIN-SUFFIX,google.com.hk,youtube
@@ -52,6 +53,7 @@ Rule:
 
 - DOMAIN-SUFFIX,googleapis.com,youtube
 
+- DOMAIN-SUFFIX,ip.sb,youtube
 
 
 - DOMAIN-SUFFIX,netflix.com,奈非
@@ -87,7 +89,7 @@ Rule:
 - DOMAIN-SUFFIX,akadns.net,全球直连
 - DOMAIN-SUFFIX,lastpass.com,全球直连
 
-
+- DOMAIN-SUFFIX,straussclassicmusic.com,全球直连
 - DOMAIN-SUFFIX,t.me,Telegram
 - DOMAIN-SUFFIX,tdesktop.com,Telegram
 - DOMAIN-SUFFIX,telegra.ph,Telegram

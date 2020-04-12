@@ -11,7 +11,7 @@ external-controller: 0.0.0.0:9090
 dns:
   enable: true
   ipv6: false
-# listen: '0.0.0.0:53'
+  listen: '0.0.0.0:53'
 # enhanced-mode: fake-ip
   enhanced-mode: redir-host
 # fake-ip-range: 198.18.0.1/16

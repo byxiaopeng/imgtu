@@ -11,12 +11,12 @@ external-controller: 0.0.0.0:9090
 dns:
   enable: true
   ipv6: false
-  listen: '0.0.0.0:53'
+# listen: '0.0.0.0:53'
 # enhanced-mode: fake-ip
   enhanced-mode: redir-host
 # fake-ip-range: 198.18.0.1/16
   nameserver:
-    - 127.0.0.1:5353
+    - 192.168.50.1
 #    - tls://dns.233py.com:853
 # fallback: # 与 nameserver 内的服务器列表同时发起请求，当规则符合 GEOIP 在 CN 以外时，fallback 列表内的域名服务器生效。
 #  - 8.8.4.4

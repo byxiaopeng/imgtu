@@ -5,39 +5,48 @@ allow-lan: true
 mode: Rule
 log-level: info
 external-controller: 0.0.0.0:9090
-#secret: ""
+# RESTful API 的口令 (可选)
+secret: ""
+
+# 您可以将静态网页资源（如 clash-dashboard）放置在一个目录中，clash 将会服务于 `${API}/ui`
+# 参数应填写配置目录的相对路径或绝对路径。
 #external-ui: dashboard
 
 dns:
   enable: true
   ipv6: false
-  listen: '0.0.0.0:53'
+  listen: 0.0.0.0:53
 # enhanced-mode: fake-ip
   enhanced-mode: redir-host
 # fake-ip-range: 198.18.0.1/16
+# fake-ip-filter: # fake ip white domain list
+# - '*.lan'
+# - localhost.ptlogin2.qq.com
   nameserver:
-    - 192.168.50.1
+    - 192.168.50.1   
 #    - tls://dns.233py.com:853
 # fallback: # 与 nameserver 内的服务器列表同时发起请求，当规则符合 GEOIP 在 CN 以外时，fallback 列表内的域名服务器生效。
 #  - 8.8.4.4
 Proxy:
-- { name: "byxiaopeng", type: vmess, server: v2tls-docker-byxiaopeng.cloud.okteto.net, port: 443, uuid: ad806487-2d26-4636-98b6-ab85cc8521f7, alterId: 4, cipher: auto, network: ws, ws-path: /ws, tls: true }
 - { name: "heroku", type: vmess, server: prov2ss.cnm.workers.dev, port: 443, uuid: ad806487-2d26-4636-98b6-ab85cc8521f7, alterId: 4, cipher: auto, network: ws, ws-path: /, tls: true }
-- { name: "t免费节点", type: vmess, server: t.ibcl.us, port: 443, uuid: ad806487-2d26-4636-98b6-ab85cc8521f7, alterId: 4, cipher: auto, network: ws, ws-path: /, tls: true }
+- { name: "oraclec", type: vmess, server: or.armn1.ml, port: 443, uuid: ad806487-2d26-4636-98b6-ab85cc8521f7, alterId: 4, cipher: auto, network: ws, ws-path: /ws, tls: true }
 - { name: "eu德国", type: vmess, server: ip.armn1.ml, port: 443, uuid: aa12098f-56f3-49ed-bd5d-267f3ce2e873, alterId: 4, cipher: auto, network: ws, ws-path: /, tls: true }
-- { name: "ss节点", type: ss, server: usw1-ext-a.kubesail.io, port: 31535, cipher: aes-128-gcm, password: "peng" }
+- { name: "okteto", type: vmess, server: cloud.cnm.workers.dev, port: 443, uuid: ad806487-2d26-4636-98b6-ab85cc8521f7, alterId: 4, cipher: auto, network: ws, ws-path: /ws, tls: true }
+- { name: "ss节点", type: ss, server: 34.80.196.0, port: 444, cipher: aes-256-cfb, password: "peng" }
+- { name: "trojan", type: trojan, server: emby.armn1.ml, port: 443, password: "nuyvSpUE" }
+#- { name: "oraclec", type: vmess, server: 158.101.11.170.ipssh.net, port: 6666, uuid: 0621135e-1931-44e1-b9b5-674f48edc4b0, alterId: 4, cipher: auto }
 Proxy Group:
 # url-test 可以自动选择与指定 URL 测速后，延迟最短的服务器
 # - { name: "PROXY", type: url-test, proxies: ["heroku", "t"], url: "http://www.gstatic.com/generate_204", interval: 300 }
 - { name: "全球直连", type: select, proxies: ["DIRECT"] }
 - { name: "全球拦截", type: select, proxies: ["REJECT", "DIRECT"] }
-- { name: "未写规则域名代理", type: select, proxies: ["heroku", "t免费节点", "byxiaopeng"] }
-- { name: "youtube", type: select, proxies: ["heroku", "eu德国","byxiaopeng", "t免费节点"] }
-- { name: "奈非", type: select, proxies: ["byxiaopeng", "eu德国", "t免费节点"] }
-- { name: "Telegram", type: select, proxies: ["t免费节点","byxiaopeng","heroku"] }
+- { name: "未写规则域名代理", type: select, proxies: ["heroku", "okteto", "oraclec", "ss节点"] }
+- { name: "youtube", type: select, proxies: ["heroku", "eu德国", "oraclec", "okteto", "ss节点"] }
+- { name: "奈非", type: select, proxies: ["ss节点", "oraclec", "okteto"] }
+- { name: "Telegram", type: select, proxies: ["okteto","heroku", "oraclec", "ss节点"] }
 Rule:
 
-#- DOMAIN,mtalk.google.com,全球直连
+- DOMAIN,mtalk.google.com,全球直连
 - DOMAIN-SUFFIX,google.de,youtube
 - DOMAIN-SUFFIX,google.ru,youtube
 - DOMAIN-SUFFIX,google.com,youtube
@@ -56,6 +65,9 @@ Rule:
 - DOMAIN-SUFFIX,ip.sb,youtube
 
 
+
+
+
 - DOMAIN-SUFFIX,netflix.com,奈非
 - DOMAIN-SUFFIX,nflxext.com,奈非
 - DOMAIN-SUFFIX,nflxvideo.net,奈非
@@ -63,6 +75,18 @@ Rule:
 - IP-CIDR,45.57.0.0/17,奈非
 - IP-CIDR,23.246.0.0/18,奈非
 #直连
+- DOMAIN,eu.armn1.ml,全球直连
+- DOMAIN-SUFFIX,heyterm.com,全球直连
+- DOMAIN-SUFFIX,euserv.com,全球直连
+- DOMAIN-SUFFIX,hostloc.com,全球直连
+- DOMAIN-SUFFIX,ibm.com,全球直连
+- DOMAIN-SUFFIX,cloudshell.dev,全球直连
+- DOMAIN-SUFFIX,idcfengye.com,全球直连
+- DOMAIN-SUFFIX,okteto.net,全球直连
+- DOMAIN-SUFFIX,github.com,全球直连
+- DOMAIN-SUFFIX,sharepoint.com,全球直连
+- DOMAIN-SUFFIX,kubesail.com,全球直连
+- DOMAIN-SUFFIX,goorm.io,全球直连
 - DOMAIN-SUFFIX,loli.net,全球直连
 - DOMAIN-SUFFIX,pm2.io,全球直连
 - DOMAIN-SUFFIX,haishan.me,全球直连
@@ -80,16 +104,13 @@ Rule:
 - DOMAIN-SUFFIX,cloudflareworkers.com,全球直连
 - DOMAIN-SUFFIX,cloudflare.com,全球直连
 - DOMAIN-SUFFIX,keymetrics.io,全球直连
-- DOMAIN-SUFFIX,kubesail.io,全球直连
-- DOMAIN-SUFFIX,workers.dev,全球直连
-- DOMAIN-SUFFIX,armn1.ml,全球直连
 - DOMAIN-SUFFIX,ip-api.com,全球直连
 - DOMAIN-SUFFIX,apple.com,全球直连
 - DOMAIN-SUFFIX,icloud.com,全球直连
 - DOMAIN-SUFFIX,akadns.net,全球直连
 - DOMAIN-SUFFIX,lastpass.com,全球直连
 
-- DOMAIN-SUFFIX,straussclassicmusic.com,全球直连
+
 - DOMAIN-SUFFIX,t.me,Telegram
 - DOMAIN-SUFFIX,tdesktop.com,Telegram
 - DOMAIN-SUFFIX,telegra.ph,Telegram
@@ -105,9 +126,12 @@ Rule:
 - IP-CIDR,149.154.164.0/22,Telegram
 - IP-CIDR,149.154.168.0/22,Telegram
 - IP-CIDR,149.154.172.0/22,Telegram
+
+# CF CDN Network
 # Local Area Network
 - IP-CIDR,192.168.0.0/16,全球直连
 - IP-CIDR,127.0.0.0/8,全球直连
+- IP-CIDR,172.17.0.0/24,全球直连
 # GeoIP China
 # 最终规则
 - GEOIP,CN,全球直连
